@@ -1,23 +1,23 @@
 package Stack;
 
+import MenuScreens.DataStructure;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseWheelEvent;
-import java.util.*;
+import java.awt.event.*;
 
-public class Stack extends JPanel{
+public class StackOiginal extends JPanel {
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
     public static final int win_WIDTH = 1000;
 
     public Color themeColor  = new Color(110,217,161);
-    public Color BGColor  = Color.darkGray;
+
     public Color blueColor  = new Color(77, 171, 213);
-    public Color pinkColor  = new Color(226, 86, 186);
+    public Color pinkColor  = new Color(179, 224, 150);
     public Color purpleColor  = new Color(128, 86, 226);
     public Color orangeColor  = new Color(226, 160, 86);
+    public Color BGColor  = pinkColor;
     Color[] arrayColor;       //Stores color of each item representing array elements while searching
 
     java.util.PriorityQueue<String> arr = new java.util.PriorityQueue<>();
@@ -39,9 +39,8 @@ public class Stack extends JPanel{
 
     public String mainFont = "Century Gothic";
 
-    public Stack(){
-
-        f = new JFrame("Stack Visualization");
+    public StackOiginal(){
+        f = new JFrame("Priority Queue (MIN Heap) Visualization");
         f.setSize(WIDTH, HEIGHT);
         f.setLayout(null);
         f.setLocationRelativeTo(null);
@@ -92,7 +91,8 @@ public class Stack extends JPanel{
             }
         });
         pos += 50;
-        datainputtext = new JLabel("Enter Value to add: ");
+
+        datainputtext = new JLabel("Enter Value to push: ");
         datainputtext.setBounds(40, pos, 280, 50);
         datainputtext.setFont(new Font(mainFont, Font.PLAIN, 15));
         datainputtext.setForeground(Color.white);
@@ -112,7 +112,6 @@ public class Stack extends JPanel{
         });
         pos+= 80;
 
-
         startBtn = new JButton("Push");
         startBtn.setBounds(40, pos, 180,40);
         startBtn.addActionListener(new ActionListener() {
@@ -124,7 +123,7 @@ public class Stack extends JPanel{
                     stackArray[topPos] = str;
                     arrayColor[topPos] = orangeColor;
                     topPos++;
-                    statusText = "Add " + str + " into the PriorityQueue";
+                    statusText = "Pushed " + str + " into the Stack";
                     Update();
                 }else{
                     JOptionPane.showMessageDialog(f,"Crosses maximum stack size!!");
@@ -158,7 +157,7 @@ public class Stack extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    statusText = "Remove " + arr.peek() + " from the Queue";
+                    statusText = "Popped " + arr.peek() + " from the Stack";
                     arr.remove();
                     stackArray[topPos-1] = "";
                     arrayColor[topPos-1] = Color.white;
@@ -189,16 +188,8 @@ public class Stack extends JPanel{
                 popBtn.setBackground(themeColor);
             }
         });
-
-
-
-
-
         pos += 60;
-        hintText = new JLabel("tip:-Make All The Word of Same Length\n like 7->07 for length 2 ");
-        hintText.setBounds(40, pos, 280, 50);
-        hintText.setFont(new Font(mainFont, Font.PLAIN, 15));
-        hintText.setForeground(Color.white);
+
 
         bottomBtn = new JButton("Back");
         bottomBtn.setBounds(40, 600, 180,40);
@@ -206,7 +197,7 @@ public class Stack extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 f.dispose();
-               // new DataStructure();
+                new DataStructure();
             }
         });
         bottomBtn.setBackground(Color.darkGray.darker());
@@ -216,13 +207,13 @@ public class Stack extends JPanel{
         bottomBtn.setBorder(null);
         bottomBtn.setVisible(true);
         //When the button is hovered
-        bottomBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        bottomBtn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
                 if (bottomBtn.isEnabled())
                     bottomBtn.setBackground(Color.darkGray.darker().darker());
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 bottomBtn.setBackground(Color.darkGray.darker());
             }
         });
@@ -234,7 +225,6 @@ public class Stack extends JPanel{
         btnPanel.add(startBtn);
         btnPanel.add(popBtn);
         btnPanel.add(bottomBtn);
-        btnPanel.add(hintText);
 
         panel.add(this);
 
@@ -247,7 +237,7 @@ public class Stack extends JPanel{
     }
 
     public static void main(String[] args) {
-        Stack as = new Stack();
+         StackOiginal as = new StackOiginal();
     }
 
     //Each time repaint is called, this function runs
@@ -259,14 +249,15 @@ public class Stack extends JPanel{
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         super.paintComponent(graphics);
 
-        g.setFont(new Font("Century Gothic", Font.PLAIN, 18));
-        graphics.setColor(BGColor);              //BG color
+        g.setFont(new Font("Century Gothic", Font.BOLD, 25));
+        graphics.setColor(new Color(189, 138, 76));              //BG color
         graphics.fillRect(0,0, WIDTH,HEIGHT);     //Background
 
         int pos = 300;        //X position of first bar
 
 
-        graphics.setColor(Color.white);
+        graphics.setColor(Color.GREEN);
+        graphics.setStroke(new BasicStroke(3));
         graphics.drawString(statusText, 28, 50);
         graphics.drawLine(pos, 100, pos+100, 100);
         graphics.drawLine(pos+300, 100, pos+400, 100);
@@ -277,7 +268,7 @@ public class Stack extends JPanel{
         pos = 410;
         int yPos = 550;
         for (int i = 0; i<stackSize; i++){
-            graphics.setColor(arrayColor[i]);
+            graphics.setColor(Color.gray);
             if (topPos - 1 == i){
                 graphics.setColor(blueColor);
             }
@@ -293,7 +284,7 @@ public class Stack extends JPanel{
             if (i == topPos-1){
                 graphics.setColor(Color.white);
                 graphics.drawLine(pos+200, yPos+20, pos+400, yPos+20);
-                graphics.drawString("Top of the PriorityQueue", pos+420, yPos+25);
+                graphics.drawString("Top of the stack", pos+420, yPos+25);
             }
             yPos-=50;
 
@@ -325,7 +316,6 @@ public class Stack extends JPanel{
     }
 
     public void Update(){
-        Arrays.sort(stackArray,Collections.reverseOrder());
         validate();
         repaint();
     }

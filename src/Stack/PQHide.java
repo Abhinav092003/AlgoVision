@@ -1,25 +1,27 @@
 package Stack;
 
+import MenuScreens.DataStructure;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseWheelEvent;
+import java.awt.event.*;
+import java.util.*;
 
-public class PriorityQueue extends JPanel {
+public class PQHide extends JPanel{
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
     public static final int win_WIDTH = 1000;
 
     public Color themeColor  = new Color(110,217,161);
-    public Color BGColor  = Color.darkGray;
+
     public Color blueColor  = new Color(77, 171, 213);
-    public Color pinkColor  = new Color(226, 86, 186);
+    public Color pinkColor  = new Color(227, 115, 94);
     public Color purpleColor  = new Color(128, 86, 226);
     public Color orangeColor  = new Color(226, 160, 86);
+    public Color BGColor  = pinkColor;
     Color[] arrayColor;       //Stores color of each item representing array elements while searching
 
-    java.util.PriorityQueue<String> arr = new java.util.PriorityQueue<>();
+    PriorityQueue<String> arr = new PriorityQueue<>();
     String[] stackArray = new String[10];
 
     public int stackSize = 10;
@@ -34,12 +36,13 @@ public class PriorityQueue extends JPanel {
     JPanel panel, btnPanel;
     JButton startBtn, resetBtn, bottomBtn, popBtn;
     JTextField input;
-    JLabel  datainputtext, actiontext, speedText;
+    JLabel  datainputtext, actiontext, speedText,hintText;
 
     public String mainFont = "Century Gothic";
 
-    public PriorityQueue(){
-        f = new JFrame("Stack Visualization");
+    public PQHide(){
+
+        f = new JFrame("Priority Queue Visualization");
         f.setSize(WIDTH, HEIGHT);
         f.setLayout(null);
         f.setLocationRelativeTo(null);
@@ -90,8 +93,7 @@ public class PriorityQueue extends JPanel {
             }
         });
         pos += 50;
-
-        datainputtext = new JLabel("Enter Value to push: ");
+        datainputtext = new JLabel("Enter Value to add: ");
         datainputtext.setBounds(40, pos, 280, 50);
         datainputtext.setFont(new Font(mainFont, Font.PLAIN, 15));
         datainputtext.setForeground(Color.white);
@@ -111,7 +113,8 @@ public class PriorityQueue extends JPanel {
         });
         pos+= 80;
 
-        startBtn = new JButton("Push");
+
+        startBtn = new JButton("Add");
         startBtn.setBounds(40, pos, 180,40);
         startBtn.addActionListener(new ActionListener() {
             @Override
@@ -122,11 +125,11 @@ public class PriorityQueue extends JPanel {
                     stackArray[topPos] = str;
                     arrayColor[topPos] = orangeColor;
                     topPos++;
-                    statusText = "Pushed " + str + " into the PriorityQueue";
+                    statusText = "Add " + str + " into the Priority Queue";
                     Update();
                 }else{
-                    JOptionPane.showMessageDialog(f,"Crosses maximum stack size!!");
-                    statusText = "Cannot push because the maximum stack size exceeds";
+                    JOptionPane.showMessageDialog(f,"Crosses maximum PQueue size!!");
+                    statusText = "Cannot add because the maximum PQueue size exceeds";
                     Update();
                 }
             }
@@ -150,13 +153,13 @@ public class PriorityQueue extends JPanel {
         });
         pos += 60;
 
-        popBtn = new JButton("Pop");
+        popBtn = new JButton("Remove");
         popBtn.setBounds(40, pos, 180,40);
         popBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-                    statusText = "Popped " + arr.peek() + " from the Queue";
+                    statusText = "Remove " + arr.peek() + " from the PriorityQueue";
                     arr.remove();
                     stackArray[topPos-1] = "";
                     arrayColor[topPos-1] = Color.white;
@@ -164,8 +167,8 @@ public class PriorityQueue extends JPanel {
                     Update();
                 }catch (Exception eee){
                     System.out.println(eee.getMessage());
-                    JOptionPane.showMessageDialog(f,"Stack is empty!!! Nothing to pop.");
-                    statusText = "Stack is empty!!! Nothing to pop.";
+                    JOptionPane.showMessageDialog(f,"PriorityQueue is empty!!! Nothing to remove.");
+                    statusText = "PriorityQueue is empty!!! Nothing to remove.";
                     Update();
                 }
             }
@@ -188,7 +191,10 @@ public class PriorityQueue extends JPanel {
             }
         });
         pos += 60;
-
+        hintText = new JLabel("<html>Make All The Word of Same Length <br> like 7->07 for length 2</html>");
+        hintText.setBounds(10, pos, 280, 50);
+        hintText.setFont(new Font(mainFont, Font.PLAIN, 15));
+        hintText.setForeground(Color.white);
 
         bottomBtn = new JButton("Back");
         bottomBtn.setBounds(40, 600, 180,40);
@@ -196,7 +202,16 @@ public class PriorityQueue extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 f.dispose();
-                // new DataStructure();
+               // new DataStructure();
+            }
+        });
+        bottomBtn = new JButton("Back");
+        bottomBtn.setBounds(40, 600, 180,40);
+        bottomBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                f.dispose();
+                new DataStructure();
             }
         });
         bottomBtn.setBackground(Color.darkGray.darker());
@@ -206,16 +221,17 @@ public class PriorityQueue extends JPanel {
         bottomBtn.setBorder(null);
         bottomBtn.setVisible(true);
         //When the button is hovered
-        bottomBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        bottomBtn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
                 if (bottomBtn.isEnabled())
                     bottomBtn.setBackground(Color.darkGray.darker().darker());
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 bottomBtn.setBackground(Color.darkGray.darker());
             }
         });
+
 
 
         btnPanel.add(resetBtn);
@@ -224,6 +240,7 @@ public class PriorityQueue extends JPanel {
         btnPanel.add(startBtn);
         btnPanel.add(popBtn);
         btnPanel.add(bottomBtn);
+        btnPanel.add(hintText);
 
         panel.add(this);
 
@@ -236,7 +253,7 @@ public class PriorityQueue extends JPanel {
     }
 
     public static void main(String[] args) {
-        Stack as = new Stack();
+        PQHide as = new PQHide();
     }
 
     //Each time repaint is called, this function runs
@@ -282,7 +299,7 @@ public class PriorityQueue extends JPanel {
             if (i == topPos-1){
                 graphics.setColor(Color.white);
                 graphics.drawLine(pos+200, yPos+20, pos+400, yPos+20);
-                graphics.drawString("Top of the stack", pos+420, yPos+25);
+                graphics.drawString("Top of the PQ", pos+420, yPos+25);
             }
             yPos-=50;
 
@@ -295,7 +312,7 @@ public class PriorityQueue extends JPanel {
         this.stackSize = n;       //Space between each bar is 2 pixels
         this.topPos = 0;
 
-        this.arr = new java.util.PriorityQueue<>();
+        this.arr = new PriorityQueue<>();
         this.arrayColor = new Color[n];
 
         for (int i = 0; i<stackSize; i++){
@@ -314,6 +331,7 @@ public class PriorityQueue extends JPanel {
     }
 
     public void Update(){
+        Arrays.sort(stackArray,Collections.reverseOrder());
         validate();
         repaint();
     }
